@@ -18,9 +18,20 @@ docker build -t logstash-ci/elastic elastic/
 
 ## Run
 
+At the first run, you need create data store folder and the template config on your docker host.
+
 ```
-docker run -tid --name=logci-elastic -v /srv/logci/elastic:/srv/logci/elastic  logstash-ci/elastic /opt/start.sh
+mkdir -p /srv/logci/elastic/{data,config}
+chmod 777 /srv/logci/elastic/data
+cp -f files/elasticsearch-default.yml /srv/logci/elastic/config/elasticsearch-default.yml
 ```
+
+```
+docker run -tid --name=logci-elastic -v /srv/logci/elastic/data:/opt/elasticsearch/data -v /srv/logci/elastic/config/elasticsearch-default.yml:/opt/elasticsearch/config/elasticsearch-default.yml  logstash-ci/elastic /opt/start.sh
+```
+
+The elastic's start.sh change your default.yml. The start.sh insert the actual IP into this config file and start the elasticsearch. 
+This is little bit complicated now, maybe, but I will change this configuration method.
 
 # LogStash
 
