@@ -14,5 +14,5 @@ RUN tar xzf /opt/logstash.tar.gz -C /opt && mv /opt/logstash-* /opt/logstash
 
 COPY files/start.sh /opt/start.sh
 RUN chmod +x /opt/start.sh
-COPY files/logstash-default.conf /opt/logstash
+COPY files/logstash-template.conf /opt/logstash
 

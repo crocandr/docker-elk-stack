@@ -2,11 +2,7 @@
 
 LOGSTASHDIR="/opt/logstash"
 
-# Default config
-if [ ! -e /opt/logstash/logstash.conf ]
-then
-  cp -f $LOGSTASHDIR/logstash-default.conf $LOGSTASHDIR/logstash.conf
-fi
+cp -f $LOGSTASHDIR/logstash-template.conf $LOGSTASHDIR/logstash.conf
 
 # Start logstash
 $LOGSTASHDIR/bin/logstash -f $LOGSTASHDIR/logstash.conf

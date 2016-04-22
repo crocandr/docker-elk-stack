@@ -18,5 +18,5 @@ RUN rm -f /opt/elasticsearch/config/elasticsearch.yml
 
 COPY files/start.sh /opt/start.sh
 RUN chmod +x /opt/start.sh
-COPY files/elasticsearch-default.yml /opt/elasticsearch/config/elasticsearch-default.yml
+COPY files/elasticsearch-template.yml /opt/elasticsearch/config/elasticsearch-template.yml
 

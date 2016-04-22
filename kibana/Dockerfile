@@ -10,5 +10,5 @@ RUN tar xzf /opt/kibana.tar.gz -C /opt && mv /opt/kibana-* /opt/kibana
 
 COPY files/start.sh /opt/start.sh
 RUN chmod +x /opt/start.sh
-COPY files/kibana-default.yml /opt/kibana/kibana-default.yml
+COPY files/kibana-template.yml /opt/kibana/kibana-template.yml
 

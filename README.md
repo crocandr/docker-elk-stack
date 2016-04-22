@@ -8,6 +8,9 @@ You got 3 container basically with this stack.
 
 All apps downloaded from the [Official Elastic Webpage](https://www.elastic.co/).
 
+
+**The order of containers is important!** Because I use 'link' for connection between the containers.
+
 # Elasticsearch
 
 ## Build
@@ -23,11 +26,13 @@ At the first run, you need create data store folder and the template config on y
 ```
 mkdir -p /srv/logci/elastic/{data,config}
 chmod 777 /srv/logci/elastic/data
-cp -f files/elasticsearch-default.yml /srv/logci/elastic/config/elasticsearch-default.yml
+cp -f elastic/files/elasticsearch-template.yml /srv/logci/elastic/config/elasticsearch-template.yml
 ```
 
+You can change template config with your own modification. When you restart the container (stop, start), the container uses your new config.
+
 ```
-docker run -tid --name=logci-elastic -v /srv/logci/elastic/data:/opt/elasticsearch/data -v /srv/logci/elastic/config/elasticsearch-default.yml:/opt/elasticsearch/config/elasticsearch-default.yml  logstash-ci/elastic /opt/start.sh
+docker run -tid --name=logci-elastic -v /srv/logci/elastic/data:/opt/elasticsearch/data -v /srv/logci/elastic/config/elasticsearch-template.yml:/opt/elasticsearch/config/elasticsearch-template.yml logstash-ci/elastic /opt/start.sh
 ```
 
 The elastic's start.sh change your default.yml. The start.sh insert the actual IP into this config file and start the elasticsearch. 
@@ -43,8 +48,18 @@ docker build -t logstash-ci/logstash logstash/
 
 ## Run
 
+At the first run, you need create log folder and the template config on your docer host. You can store received logs with logstash, and you can store in the elasticsearch too. This is your choice. :)
+
 ```
-docker run -tid --name=logci-logstash -p 5000:5000 -p 5000:5000/udp -p 5044:5044 --link logci-elastic:elasticsrv logstash-ci/logstash /opt/start.sh
+mkdir -p /srv/logci/logstash/{data,config}
+chmod 777 /srv/logci/elastic/data
+cp -f logstash/files/logstash-template.conf /srv/logci/logstash/config/logstash-template.conf
+```
+
+You can change template config with your own modification. When you restart the container (stop, start), the container uses your new config.
+
+```
+docker run -tid --name=logci-logstash -v /srv/logci/logstash/data:/srv/logstash -v /srv/logci/logstash/config/logstash-template.conf:/opt/logstash/logstash-template.conf -p 5000:5000 -p 5000:5000/udp -p 5044:5044 --link logci-elastic:elasticsrv logstash-ci/logstash /opt/start.sh
 ```
 
 # Kibana
@@ -57,8 +72,17 @@ docker build -t logstash-ci/kibana kibana/
 
 ## Run
 
+At the first run, you need create data store folder and the template config on your docker host.
+
 ```
-docker run -tid --name=logci-kibana -p 5601:5601 --link logci-elastic:elasticsrv logstash-ci/kibana /opt/start.sh
+mkdir -p /srv/logci/kibana/config
+cp -f kibana/files/kibana-template.yml /srv/logci/kibana/config/kibana-template.yml
+```
+
+You can change template config with your own modification. When you restart the container (stop, start), the container uses your new config.
+
+```
+docker run -tid --name=logci-kibana -v /srv/logci/kibana/config/kibana-template.yml:/opt/kibana/kibana-template.yml -p 5601:5601 --link logci-elastic:elasticsrv logstash-ci/kibana /opt/start.sh
 ```
 
 # Usage
@@ -93,10 +117,11 @@ Official page: https://www.elastic.co/downloads/beats/filebeat
 
 Config:
 
+Comment out (disable) the elasticsearch in your config. Maybe the LogStash target is better.
+
 filebeat.yml:
 
 ```
-...
 ...
       paths:
       #  - /var/log/*.log
@@ -117,6 +142,8 @@ Start:
 ```
 
 But you can install FileBeat with rpm and/or deb package too. Maybe this method little bit easier.
+
+
 
 
 Good Luck!
