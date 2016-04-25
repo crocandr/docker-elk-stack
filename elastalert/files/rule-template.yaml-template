@@ -1,0 +1,17 @@
+name: My Rule1
+type: frequency
+index: logstash-*
+num_events: 10
+timeframe:
+  hours: 1
+
+filter:
+  - term:
+    message: ".*test.*"
+
+alert:
+  - "email"
+
+email:
+  - "somebody@mydomain.com"
+

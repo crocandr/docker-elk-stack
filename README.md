@@ -85,6 +85,30 @@ You can change template config with your own modification. When you restart the 
 docker run -tid --name=logci-kibana -v /srv/logci/kibana/config/kibana-template.yml:/opt/kibana/kibana-template.yml -p 5601:5601 --link logci-elastic:elasticsrv logstash-ci/kibana /opt/start.sh
 ```
 
+# Elastalert
+
+## Build
+
+```
+docker build -t logstash-ci/elastalert elastalert/
+```
+
+## Run
+
+At the first run, you need create data store folder and the template config on your docker host.
+
+```
+mkdir -p /srv/logci/elastalert/{rules,config}
+cp -f elastalert/files/config-template.yaml /srv/logci/elastalert/config/
+cp -f elastalert/files/rule-template.yaml-template /srv/logci/elastalert/rules/myrule1.yaml
+```
+
+You can change template config with your own modification. When you restart the container (stop, start), the container uses your new config.
+
+```
+docker run -tid --name=logci-elastalert -v /srv/logci/elastalert/rules:/opt/elastalert/rules -v /srv/logci/elastalert/config/config-template.yaml:/opt/elastalert/config-template.yaml --link logci-elastic:elasticsrv logstash-ci/elastalert /opt/start.sh
+```
+
 # Usage
 
 ## View the logs
