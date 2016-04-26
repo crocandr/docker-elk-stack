@@ -14,7 +14,10 @@ RUN tar xzf /opt/elasticsearch.tar.gz -C /opt && mv /opt/elasticsearch-* /opt/el
 # user for elasticsearch
 RUN useradd -g users -s /bin/bash -m elastic
 RUN chown elastic:users -R /opt/elasticsearch
-RUN rm -f /opt/elasticsearch/config/elasticsearch.yml 
+RUN rm -f /opt/elasticsearch/config/elasticsearch.yml
+# Watcher - Trial
+# RUN /opt/elasticsearch/bin/plugin install -b elasticsearch/license/latest
+# RUN /opt/elasticsearch/bin/plugin install -b elasticsearch/watcher/latest 
 
 COPY files/start.sh /opt/start.sh
 RUN chmod +x /opt/start.sh

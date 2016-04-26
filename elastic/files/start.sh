@@ -9,5 +9,4 @@ MYIP="$( ifconfig eth0 | grep -i "inet addr" | cut -f2 -d':' | cut -f1 -d' ' )"
 cp -f $ELASTICDIR/config/elasticsearch-template.yml $ELASTICDIR/config/elasticsearch.yml
 sed -i s@--MYIP--@$MYIP@g $ELASTICDIR/config/elasticsearch.yml
 
-su elastic -c /opt/elasticsearch/bin/elasticsearch
-
+su elastic -c $ELASTICDIR/bin/elasticsearch
