@@ -168,6 +168,29 @@ Start:
 But you can install FileBeat with rpm and/or deb package too. Maybe this method little bit easier.
 
 
+# Extras
+
+## Watcher
+
+The [Watcher](https://www.elastic.co/products/watcher) is an alert plugin for Elasticsearch but you have to buy a license for this.  
+You can enable watcher plugin for Elasticsearch with a 30day long trial time.  
+You need modify the elastic's Dockerfile (build file), you need uncomment the plugin installation lines.  
+Example:  
+
+elastic/Dockerfile:
+
+```
+...
+# Watcher - Trial
+RUN /opt/elasticsearch/bin/plugin install -b elasticsearch/license/latest
+RUN /opt/elasticsearch/bin/plugin install -b elasticsearch/watcher/latest
+...
+```
+
+... and now, you have to build the elasticsearch container.
+
+
+
 
 
 Good Luck!
