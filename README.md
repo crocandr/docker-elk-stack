@@ -149,7 +149,7 @@ But you can install FileBeat with rpm and/or deb package too. Maybe this method 
 ## Watcher
 
 The [Watcher](https://www.elastic.co/products/watcher) is an alert plugin for Elasticsearch but you have to buy a license for this.  
-You can enable watcher plugin for Elasticsearch with a 30day long trial time.  
+You can enable watcher plugin for Elasticsearch with a 30 days long trial time.  
 You need modify the elastic's Dockerfile (build file), you need uncomment the plugin installation lines.  
 Example:  
 
@@ -163,7 +163,7 @@ RUN /opt/elasticsearch/bin/plugin install -b elasticsearch/watcher/latest
 ...
 ```
 
-... and now, you have to build the elasticsearch container.
+... and now, you have to (re)build the elasticsearch container.
 
 
 ## Elastalert
@@ -180,7 +180,7 @@ docker build -t logstash-ci/elastalert elastalert/
 
 You need change template config with your own modification. When you restart the container (stop, start), the container uses your new config.
 
-SMTP Config:
+SMTP Config:  
 You have to change these lines in your */srv/logci/elastalert/config/config-template.yaml* file. You have to give an available SMTP server in your network.
 
 ```
@@ -218,10 +218,10 @@ Folders/files:
 docker run -tid --name=logci-elastalert -v /srv/logci/elastalert/rules:/opt/elastalert/rules -v /srv/logci/elastalert/config/config-template.yaml:/opt/elastalert/config-template.yaml --link
  logci-elastic:elasticsrv logstash-ci/elastalert /opt/start.sh
 ```
-  
-  
-  
-  
-  
-  
+   
+   
+   
+   
+   
+   
 Good Luck!
