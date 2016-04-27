@@ -87,6 +87,8 @@ docker run -tid --name=logci-kibana -v /srv/logci/kibana/config/kibana-template.
 
 # Elastalert
 
+Elasticalert container is optional. You can start this container if you need some alert about bad things in the log messages.
+
 ## Build
 
 ```
@@ -104,6 +106,18 @@ cp -f elastalert/files/rule-template.yaml-template /srv/logci/elastalert/rules/m
 ```
 
 You can change template config with your own modification. When you restart the container (stop, start), the container uses your new config.
+
+SMTP Config:  
+You have to change these lines in your /srv/logci/elastalert/config/config-template.yaml file. You have to give an available SMTP server in your network.
+```
+smtp_host: 192.168.1.254
+smtp_port: 25
+from_addr: noreply-elastalert@mycompany.com
+```
+and you have to change the destination address too, in the /srv/logci/elastalert/rules/myrule1.yaml file:
+```
+  - "support@mycompany.com"
+```
 
 ```
 docker run -tid --name=logci-elastalert -v /srv/logci/elastalert/rules:/opt/elastalert/rules -v /srv/logci/elastalert/config/config-template.yaml:/opt/elastalert/config-template.yaml --link logci-elastic:elasticsrv logstash-ci/elastalert /opt/start.sh

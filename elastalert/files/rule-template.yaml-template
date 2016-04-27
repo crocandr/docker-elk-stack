@@ -1,20 +1,19 @@
 name: My Rule1
-
 type: frequency
 index: logstash-*
-num_events: 5 
+num_events: 5
 timeframe:
-#  hours: 1
-  minutes: 2
-
+  minutes: 1
 filter:
-  - term:
-    # message: ".*test.*"
-    ip_address: "192.18.56.101"
-
+  - regexp:
+#      host: "192.168.*"
+       message: ".*abc.*"
 alert:
   - "email"
+#  - "command"
 
 email:
-  - "somebody@mydomain.com"
+  - "support@mycompany.com"
+
+#command: /opt/elastalert/cmd.sh "[%(message)s ] [%(host)s]"
 

@@ -40,3 +40,6 @@ writeback_index: elastalert_status
 alert_time_limit:
   days: 2
 
+smtp_host: 192.168.1.254
+smtp_port: 25
+from_addr: noreply-elastalert@mycompany.com
