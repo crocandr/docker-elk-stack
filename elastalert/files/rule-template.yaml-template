@@ -1,0 +1,19 @@
+name: My Rule1
+type: frequency
+index: logstash-*
+num_events: 5
+timeframe:
+  minutes: 1
+filter:
+  - regexp:
+#      host: "192.168.*"
+       message: ".*abc.*"
+alert:
+  - "email"
+#  - "command"
+
+email:
+  - "support@mycompany.com"
+
+#command: /opt/elastalert/cmd.sh "[%(message)s ] [%(host)s]"
+

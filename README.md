@@ -149,7 +149,7 @@ But you can install FileBeat with rpm and/or deb package too. Maybe this method 
 ## Watcher
 
 The [Watcher](https://www.elastic.co/products/watcher) is an alert plugin for Elasticsearch but you have to buy a license for this.  
-You can enable watcher plugin for Elasticsearch with a 30day long trial time.  
+You can enable watcher plugin for Elasticsearch with a 30 days long trial time.  
 You need modify the elastic's Dockerfile (build file), you need uncomment the plugin installation lines.  
 Example:  
 
@@ -163,10 +163,65 @@ RUN /opt/elasticsearch/bin/plugin install -b elasticsearch/watcher/latest
 ...
 ```
 
-... and now, you have to build the elasticsearch container.
+... and now, you have to (re)build the elasticsearch container.
 
 
+## Elastalert
+
+Elasticalert container is optional. You can start this container if you need some alert about bad things in the log messages.
+
+### Build
+
+```
+docker build -t logstash-ci/elastalert elastalert/
+```
+
+### Config
+
+You need change template config with your own modification. When you restart the container (stop, start), the container uses your new config.
+
+SMTP Config:  
+You have to change these lines in your */srv/logci/elastalert/config/config-template.yaml* file. You have to give an available SMTP server in your network.
+
+```
+smtp_host: 192.168.1.254
+smtp_port: 25
+from_addr: noreply-elastalert@mycompany.com
+```
+
+...and you have to change the destination address, in the */srv/logci/elastalert/rules/myrule1.yaml* file:
+
+```
+  - "support@mycompany.com"
+```
+
+This rule file is only an example file for basic test!
 
 
+At the first run, you need create data store folder and the template config on your docker host.
 
+```
+mkdir -p /srv/logci/elastalert/{rules,config}
+cp -f elastalert/files/config-template.yaml /srv/logci/elastalert/config/
+cp -f elastalert/files/rule-template.yaml-template /srv/logci/elastalert/rules/myrule1.yaml
+```
+
+Folders/files:
+
+  - /srv/logci/elastalert/config/config-template.yaml - global config file of the elastalert
+  - /srv/logci/elastalert/rules/ - store folder of the alert rules
+
+
+### Run
+
+```
+docker run -tid --name=logci-elastalert -v /srv/logci/elastalert/rules:/opt/elastalert/rules -v /srv/logci/elastalert/config/config-template.yaml:/opt/elastalert/config-template.yaml --link
+ logci-elastic:elasticsrv logstash-ci/elastalert /opt/start.sh
+```
+   
+   
+   
+   
+   
+   
 Good Luck!
