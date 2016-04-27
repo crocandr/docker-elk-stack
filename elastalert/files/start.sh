@@ -7,6 +7,8 @@ ELASTALERTDIR="/opt/elastalert"
 MYIP="$( ifconfig eth0 | grep -i "inet addr" | cut -f2 -d':' | cut -f1 -d' ' )"
 
 cp -f $ELASTALERTDIR/config-template.yaml $ELASTALERTDIR/config.yaml
+ELASTICIP="$( grep -i elasticsrv /etc/hosts | awk '{print $1}' )"
+sed -i s@elasticsrv@$ELASTICIP@g $ELASTALERTDIR/config.yaml
 
 #python $ELASTALERTDIR/elastalert/elastalert.py --config $ELASTALERTDIR/config.yaml --verbose
 cd $ELASTALERTDIR && python elastalert/elastalert.py --config config.yaml --verbose
